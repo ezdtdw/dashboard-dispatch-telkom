@@ -75,7 +75,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-100 text-slate-800 h-screen overflow-hidden flex flex-col font-sans">
 
     <!-- Header Section -->
     <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-40 border-b border-slate-800 no-print flex items-center justify-between px-4 sm:px-6 h-16">
@@ -371,56 +371,47 @@
                 </div>
             </div>
 
-            <!-- View Dispatch (Gaya Baru: Per Mitra -> STO -> Teknisi) -->
+            <!-- View Dispatch (Gaya Baru: Per Mitra -> Daftar Tugas -> Pilih Teknisi) -->
             <div id="view-dispatch" class="hidden space-y-4">
-                
-                <!-- LAYAR 1: DAFTAR STO PER MITRA -->
-                <div id="dispatch-sto-screen">
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
                         <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-rose-500"></i>
-                            Pilih Area STO per Mitra
+                            <i data-lucide="send" class="w-5 h-5 text-blue-500"></i>
+                            Dispatch Penugasan Teknisi
                         </h3>
-                        <p class="text-xs text-slate-500 mt-1">Pilih Mitra di bawah untuk menampilkan daftar Area STO terkait.</p>
+                        <p class="text-xs text-slate-500 mt-1">Pilih Mitra, lalu tentukan teknisi. Gunakan pencarian untuk mencari WONUM/No Order secara cepat.</p>
                     </div>
-
-                    <!-- TAB PILIHAN MITRA (BISTEL, BST, TA, DLL) -->
-                    <div id="dispatch-mitra-tabs" class="flex flex-wrap gap-2 mb-4"></div>
-
-                    <!-- KOTAK STO KHUSUS MITRA YANG DIPILIH -->
-                    <div id="sto-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
-                </div>
-
-                <!-- LAYAR 2: DAFTAR TEKNISI -->
-                <div id="dispatch-tech-screen" class="hidden">
-                    <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
-                        <button onclick="showStoScreen()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition">
-                            <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke STO
-                        </button>
-                        <h3 class="font-bold text-base text-slate-800 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 w-full sm:w-auto flex items-center gap-2">
-                            Mitra: <span id="selected-mitra-label" class="text-blue-600 font-black uppercase"></span>
-                            <span class="text-slate-300">|</span>
-                            STO: <span id="selected-sto-label" class="text-indigo-600 font-black uppercase"></span>
-                        </h3>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
-                        <div class="w-full overflow-x-auto">
-                            <table class="w-full text-xs text-left text-slate-700 whitespace-nowrap">
-                                <thead class="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
-                                    <tr>
-                                        <th class="px-3 py-3 w-[15%] text-center">Kirim Otomatis</th>
-                                        <th class="px-3 py-3 w-[45%]">Nama Teknisi</th>
-                                        <th class="px-3 py-3 w-[20%] text-center">Total Order</th>
-                                        <th class="px-3 py-3 w-[20%] text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dispatchTableBody" class="divide-y divide-slate-200"></tbody>
-                            </table>
-                        </div>
+                    <!-- KOTAK PENCARIAN DISPATCH BARU -->
+                    <div class="w-full md:w-72 relative">
+                        <input type="text" id="dispatchSearch" oninput="renderDispatchTable()" placeholder="Cari Wonum, No Order, Alamat, STO..." class="w-full bg-slate-50 border border-slate-300 text-xs rounded-lg pl-8 pr-3 py-2 font-medium focus:ring-blue-500 focus:border-blue-500">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5"></i>
                     </div>
                 </div>
-            
+                <!-- TAB PILIHAN MITRA (BISTEL, BST, TA, DLL) -->
+                <div id="dispatch-mitra-tabs" class="flex flex-wrap gap-2"></div>
+
+                <!-- TABEL DAFTAR TUGAS -->
+                <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden mt-2">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-xs text-left text-slate-700 whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
+                                <tr>
+                                    <th class="px-3 py-3 text-center w-10">No</th>
+                                    <th class="px-3 py-3">SA</th>
+                                    <th class="px-3 py-3">STO</th>
+                                    <th class="px-3 py-3">WONUM</th>
+                                    <th class="px-3 py-3">No Order</th>
+                                    <th class="px-3 py-3">No Service / CP</th>
+                                    <th class="px-3 py-3">Alamat</th>
+                                    <th class="px-3 py-3 min-w-[180px]">Pilih Teknisi</th>
+                                    <th class="px-3 py-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dispatchTableBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div> <!-- TUTUP VIEW DISPATCH -->
 
             <!-- View Khusus: ACT (ACTIVATION COMPLETED) -->
@@ -1359,7 +1350,7 @@
                         <td class="p-2 font-mono">${item.wonum || '-'}</td>
                         <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] ${getStatusBadgeClass(item.status)}">${item.status}</span></td>
                         <td class="p-2 text-center font-bold">${durasi} Hr</td>
-                        <td class="p-2 text-slate-600 wrap-cell">${item.keterangan || '-'}</td>
+                        <td class="p-2 wrap-cell">${getEditableKeterangan(item.wonum, item.keterangan)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -1410,7 +1401,7 @@
                     <td class="p-2 font-mono font-bold">${item.wonum || '-'}</td>
                     <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] ${getStatusBadgeClass(item.status)}">${item.status}</span></td>
                     <td class="p-2 text-center font-bold">${durasi} Hr</td>
-                    <td class="p-2 text-slate-600 wrap-cell">${item.keterangan || '-'}</td>
+                    <td class="p-2 wrap-cell">${getEditableKeterangan(item.wonum, item.keterangan)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1418,261 +1409,241 @@
 
         function populateDispatchDropdown() {}
 
+        // ==========================================
+        // FUNGSI DISPATCH (TAB MITRA + PILIH TEKNISI MANUAL)
+        // ==========================================
+
         let activeDispatchMitra = null;
 
-        function populateDispatchDropdown() {} 
-
-        // FUNGSI KHUSUS DISPATCH: Hanya mengambil order yang BELUM COMPLETED
+        // 1. Ambil order yang BELUM COMPLETED saja
         function getDispatchFilteredData() {
             return getFilteredData().filter(item => {
                 const st = (item.status || '').toUpperCase();
-                // Buang order yang COMPLETED & ACTIVATION COMPLETED
                 return st !== 'COMPLETED' && st !== 'ACTIVATION COMPLETED';
             });
         }
 
+        // 2. Render Tabel Dispatch
         function renderDispatchTable() {
-            showStoScreen();
-            const filtered = getDispatchFilteredData(); // Menggunakan filter khusus non-completed
-            const mitras = [...new Set(filtered.map(item => item.mitra).filter(Boolean))].sort();
-
+            const allFiltered = getDispatchFilteredData();
             const tabsContainer = document.getElementById('dispatch-mitra-tabs');
+            const tbody = document.getElementById('dispatchTableBody');
+            
+            if (!tabsContainer || !tbody) return;
             tabsContainer.innerHTML = '';
+            tbody.innerHTML = '';
 
-            if (mitras.length === 0) {
-                document.getElementById('sto-grid').innerHTML = '<p class="col-span-full text-center text-slate-500 bg-white py-6 rounded-xl border border-slate-200">Tidak ada order aktif (Non-Completed) untuk di-dispatch.</p>';
+            if (allFiltered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-slate-400 font-medium">Tidak ada tugas aktif (Non-Completed) untuk di-dispatch.</td></tr>';
                 return;
             }
 
+            // --- A. BIKIN TOMBOL TAB MITRA ---
+            const mitras = [...new Set(allFiltered.map(item => item.mitra).filter(Boolean))].sort();
+            
             if (!activeDispatchMitra || !mitras.includes(activeDispatchMitra)) {
                 activeDispatchMitra = mitras[0];
             }
 
             mitras.forEach(m => {
                 const isActive = m === activeDispatchMitra;
+                const count = allFiltered.filter(i => i.mitra === m).length;
+                
                 const btn = document.createElement('button');
                 btn.className = isActive 
                     ? "px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition flex items-center gap-2"
                     : "px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition flex items-center gap-2";
                 
-                // Hitung total order aktif (Belum completed)
-                const count = filtered.filter(i => i.mitra === m && i.teknisi && i.teknisi !== '-').length;
                 btn.onclick = () => {
                     activeDispatchMitra = m;
+                    document.getElementById('dispatchSearch').value = ''; // Kosongkan pencarian saat ganti mitra
                     renderDispatchTable();
                 };
-                btn.innerHTML = `<span>MITRA ${m}</span> <span class="${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'} text-[10px] px-2 py-0.5 rounded-full">${count} Pending</span>`;
+                
+                btn.innerHTML = `<span>MITRA ${m}</span> <span class="${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'} text-[10px] px-2 py-0.5 rounded-full">${count} Tugas</span>`;
                 tabsContainer.appendChild(btn);
             });
 
-            renderStoGridForMitra(activeDispatchMitra);
-        }
-
-        function renderStoGridForMitra(mitra) {
-            const filtered = getDispatchFilteredData().filter(i => i.mitra === mitra);
-            const stos = [...new Set(filtered.map(item => item.sto).filter(Boolean))].sort();
-            const grid = document.getElementById('sto-grid');
-            grid.innerHTML = '';
-
-            if (stos.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center text-slate-500 bg-white py-6 rounded-xl border border-slate-200">Tidak ada order aktif untuk Mitra ${mitra}.</p>`;
-                return;
-            }
-
-            stos.forEach(sto => {
-                const count = filtered.filter(i => i.sto === sto && i.teknisi && i.teknisi !== '-').length;
-                const btn = document.createElement('button');
-                btn.className = "bg-white border-2 border-indigo-50 hover:border-indigo-400 p-4 rounded-xl shadow-sm hover:shadow-md transition text-center flex flex-col items-center gap-2 group";
-                btn.onclick = () => showTechScreen(sto, mitra);
-                btn.innerHTML = `
-                    <div class="p-3 bg-indigo-50 rounded-full group-hover:bg-indigo-100 group-hover:scale-110 transition">
-                        <i data-lucide="map" class="w-6 h-6 text-indigo-500"></i>
-                    </div>
-                    <span class="font-black text-slate-800 text-lg uppercase">${sto}</span>
-                    <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">${count} Order Aktif</span>
-                `;
-                grid.appendChild(btn);
-            });
-            lucide.createIcons();
-        }
-
-        function showStoScreen() {
-            document.getElementById('dispatch-sto-screen').classList.remove('hidden');
-            document.getElementById('dispatch-tech-screen').classList.add('hidden');
-        }
-
-        function showTechScreen(sto, mitra) {
-            document.getElementById('dispatch-sto-screen').classList.add('hidden');
-            document.getElementById('dispatch-tech-screen').classList.remove('hidden');
-            document.getElementById('selected-mitra-label').textContent = mitra;
-            document.getElementById('selected-sto-label').textContent = sto;
-
-            const filtered = getDispatchFilteredData().filter(i => i.sto === sto && i.mitra === mitra);
-            const tbody = document.getElementById('dispatchTableBody');
-            tbody.innerHTML = '';
-
-            const grouped = {};
-            filtered.forEach(item => {
-                const tName = item.teknisi;
-                if (!tName || tName === '-') return;
-                if (!grouped[tName]) grouped[tName] = { total: 0, orders: [] };
-                grouped[tName].total += 1;
-                grouped[tName].orders.push(item);
-            });
-
-            const techList = Object.keys(grouped).sort();
+            // --- B. RENDER TABEL SESUAI MITRA YANG DIPILIH & PENCARIAN ---
+            let mitraFilteredData = allFiltered.filter(item => item.mitra === activeDispatchMitra);
             
-            if (techList.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 font-medium">Tidak ada order aktif (Non-Completed) untuk teknisi di area STO ini.</td></tr>';
+            // FITUR PENCARIAN DISPATCH DITERAPKAN DI SINI
+            const searchQuery = (document.getElementById('dispatchSearch')?.value || '').toLowerCase();
+            if (searchQuery) {
+                mitraFilteredData = mitraFilteredData.filter(item => 
+                    (item.wonum && item.wonum.toLowerCase().includes(searchQuery)) ||
+                    (item.noOrder && item.noOrder.toLowerCase().includes(searchQuery)) ||
+                    (item.alamat && item.alamat.toLowerCase().includes(searchQuery)) ||
+                    (item.sto && item.sto.toLowerCase().includes(searchQuery))
+                );
+            }
+            
+            if (mitraFilteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-slate-400 font-medium">Tidak ada tugas yang sesuai dengan pencarian.</td></tr>';
                 return;
             }
 
-            techList.forEach(tName => {
-                // KUNCI PERBAIKAN: Melindungi nama yang ada tanda petiknya agar tidak merusak tombol
-                const escapedTechName = tName.replace(/'/g, "\\'"); 
-                
+            mitraFilteredData.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50";
+
+                const wonum = item.wonum || '-';
+                const noOrder = item.noOrder || '-';
+                const noService = item.noService || item.cp || '-';
+                const alamat = item.alamat || '-';
+                const sto = item.sto || '-';
+                const sa = item.sa || '-'; // Ambil data SA dari order ini
+
+                // LOGIKA PINTAR: Cari teknisi HANYA yang melayani SA dan Mitra ini
+                let techsInSa = rawData.filter(r => r.mitra === activeDispatchMitra && r.sa === sa)
+                                       .map(r => r.teknisi)
+                                       .filter(t => t && t !== '-');
                 
+                // Jaga-jaga: Kalau SA ini belum ada teknisinya, munculkan semua teknisi di Mitra tersebut
+                if (techsInSa.length === 0) {
+                    techsInSa = rawData.filter(r => r.mitra === activeDispatchMitra)
+                                       .map(r => r.teknisi)
+                                       .filter(t => t && t !== '-');
+                }
+                
+                const uniqueTechs = [...new Set(techsInSa)].sort();
+
+                let techOptions = '';
+                uniqueTechs.forEach(tech => {
+                    techOptions += `<option value="${tech}">`;
+                });
+
+                const defaultTech = (item.teknisi && item.teknisi !== '-') ? item.teknisi : '';
+
                 tr.innerHTML = `
-                    <td class="px-3 py-2 text-center">
-                        <button onclick="sendDirectTelegramBot('${escapedTechName}', '${sto}', '${mitra}')" class="inline-flex items-center justify-center gap-1.5 bg-[#0088cc] hover:bg-[#0077b3] text-white px-4 py-2 rounded-lg font-bold transition shadow-sm w-full">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim
-                        </button>
+                    <td class="px-3 py-2.5 text-center font-semibold text-slate-500">${index + 1}</td>
+                    <td class="px-3 py-2.5 font-bold text-slate-800 uppercase">${sa}</td>
+                    <td class="px-3 py-2.5 font-bold text-slate-800 uppercase">${sto}</td>
+                    <td class="px-3 py-2.5 font-mono text-indigo-600 font-semibold">${wonum}</td>
+                    <td class="px-3 py-2.5 font-mono text-blue-600">${noOrder}</td>
+                    <td class="px-3 py-2.5 font-medium text-slate-700">${noService}</td>
+                    <td class="px-3 py-2.5 text-slate-600 truncate max-w-[200px]" title="${alamat}">${alamat}</td>
+                    <td class="px-3 py-2.5">
+                        <input type="text" 
+                            id="tech-select-${index}" 
+                            list="tech-list-${index}" 
+                            value="${defaultTech}" 
+                            placeholder="🔍 Cari Teknisi..." 
+                            autocomplete="off"
+                            onfocus="this.dataset.old = this.value; this.value = '';" 
+                            onblur="if(this.value === '') this.value = this.dataset.old;"
+                            class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 font-semibold">
+                        <datalist id="tech-list-${index}">
+                            ${techOptions}
+                        </datalist>
                     </td>
-                    <td class="px-3 py-2 font-bold text-slate-800 text-[11px]">${tName}</td>
-                    <td class="px-3 py-2 text-center font-black text-indigo-600 text-sm">${grouped[tName].total}</td>
-                    <td class="px-3 py-2 text-center">
-                        <!-- Panggil fungsi openDispatchDetail yang baru -->
-                        <button onclick="openDispatchDetail('${escapedTechName}', '${sto}', '${mitra}')" class="text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 transition">
-                            Lihat Detail
+                    <td class="px-3 py-2.5 text-center">
+                        <button onclick="sendSingleTaskTelegram(${index})" class="inline-flex items-center justify-center gap-1 bg-[#0088cc] hover:bg-[#0077b3] text-white px-3 py-1.5 rounded-lg font-bold text-xs transition shadow-sm">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+
             lucide.createIcons();
         }
 
-        // FUNGSI KHUSUS UNTUK TOMBOL DETAIL DI MENU DISPATCH
-        function openDispatchDetail(techName, sto, mitra) {
-            // Isi Judul Modal
-            document.getElementById('modalTechName').innerHTML = `<i data-lucide="user" class="w-5 h-5 text-blue-600"></i> Tugas Aktif (Dispatch): ${techName} - Area ${sto}`;
+        // 3. Fungsi Kirim API Telegram
+        async function sendSingleTaskTelegram(index) {
+            const allFiltered = getDispatchFilteredData();
+            let mitraFilteredData = allFiltered.filter(item => item.mitra === activeDispatchMitra);
             
-            // Ambil data yang khusus belum selesai (non-completed)
-            const filtered = getDispatchFilteredData();
-            
-            // Saring HANYA order di STO tersebut dan untuk teknisi tersebut
-            const techOrders = filtered.filter(r => r.mitra === mitra && r.teknisi === techName && r.sto === sto);
-            const tbody = document.getElementById('modalTechTableBody');
-            tbody.innerHTML = '';
-
-            if (techOrders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-400">Tidak ada order aktif.</td></tr>`;
-            } else {
-                techOrders.forEach(item => {
-                    const durasi = calculateDurationDays(item.tglCreate, item.tanggal);
-                    const isOver3Days = durasi > 3;
-                    const durasiHtml = isOver3Days 
-                        ? `<span class="inline-flex items-center gap-1 text-rose-600 font-bold"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> ${durasi} Hr</span>`
-                        : `<span class="font-bold text-slate-700">${durasi} Hr</span>`;
-
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 text-xs";
-                    tr.innerHTML = `
-                        <td class="p-2 font-semibold">${item.sto}</td>
-                        <td class="p-2 font-bold text-blue-600">${item.teknisi || '-'}</td>
-                        <td class="p-2 font-mono">${item.wonum || '-'}</td>
-                        <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] ${getStatusBadgeClass(item.status)}">${item.status}</span></td>
-                        <td class="p-2 text-center">${durasiHtml}</td>
-                        <td class="p-2 text-slate-600 wrap-cell">${item.keterangan || '-'}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+            // Terapkan filter pencarian yang sama agar index tabel sinkron dengan data yang mau dikirim
+            const searchQuery = (document.getElementById('dispatchSearch')?.value || '').toLowerCase();
+            if (searchQuery) {
+                mitraFilteredData = mitraFilteredData.filter(item => 
+                    (item.wonum && item.wonum.toLowerCase().includes(searchQuery)) ||
+                    (item.noOrder && item.noOrder.toLowerCase().includes(searchQuery)) ||
+                    (item.alamat && item.alamat.toLowerCase().includes(searchQuery)) ||
+                    (item.sto && item.sto.toLowerCase().includes(searchQuery))
+                );
             }
             
-            lucide.createIcons();
-            document.getElementById('techDetailModal').classList.remove('hidden');
-        }
+            const order = mitraFilteredData[index];
+            if (!order) return;
 
-        // FUNGSI API TELEGRAM (Anti-Error "Message Too Long" - Sistem Cicil per Order)
-        async function sendDirectTelegramBot(techName, sto, mitra) {
-            
-            const BOT_TOKEN = '8761040444:AAHuoy0HpbbhxantB5nJ9kHVSaelyw8LikQ'; 
-            const TARGET_CHAT_ID = '5356190617'; 
+            const techSelect = document.getElementById(`tech-select-${index}`);
+            const selectedTech = techSelect ? techSelect.value : '';
 
-            const filtered = getDispatchFilteredData().filter(i => i.sto === sto && i.mitra === mitra && i.teknisi === techName);
-            
-            if (filtered.length === 0) {
-                alert('Tidak ada tugas aktif untuk dikirim.');
+            if (!selectedTech) {
+                alert('Silakan pilih Teknisi terlebih dahulu dari dropdown!');
                 return;
             }
 
+            // KREDENSIAL BOT KAMU
+            const BOT_TOKEN = '8761040444:AAHuoy0HpbbhxantB5nJ9kHVSaelyw8LikQ'; 
+            const TARGET_CHAT_ID = '5356190617'; 
+
+            const typeOrder = order.typeOrder && order.typeOrder !== '-' ? order.typeOrder : 'CREATE';
+            const phone = order.cp && order.cp !== '-' ? order.cp.replace(/\D/g, '') : '';
+            const waLink = phone ? `https://wa.me/${phone}` : '#';
+            const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.alamat || '')}`;
+
+            const safeNama = (order.nama || '-').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeAlamat = (order.alamat || '-').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            const saName = order.sa && order.sa !== '-' ? order.sa : 'SAMARINDA'; // Ambil nama SA-nya
+
+            // FORMAT PESAN HTML
+            let orderText = `🚀 <b>DISPATCH PENUGASAN WOC</b>\n`;
+            orderText += `--------------------------------\n`;
+            orderText += `<b>ORDER PSB SA ${saName.toUpperCase()}</b>\n`;
+            orderText += `#${typeOrder.replace(/\s+/g, '_')}_${order.sto}\n\n`;
+            
+            orderText += `<b>TGL ORDER :</b> <code>${order.tanggal}</code>\n`;
+            orderText += `<b>HOMEPASS ID :</b> <code>${order.homepassId}</code>\n`;
+            orderText += `<b>ODP :</b> <code>${order.odp}</code>\n\n`;
+            
+            orderText += `<b>TYPE | STO | PAKET :</b>\n`;
+            orderText += `<code>${typeOrder} | ${order.sto} | ${order.paket}</code>\n\n`;
+            
+            orderText += `<b>WONUM | NO SERVICE :</b>\n`;
+            orderText += `<code>${order.wonum} | ${order.noService}</code>\n\n`;
+            
+            orderText += `<b>NO ORDER :</b>\n`;
+            orderText += `<code>${order.noOrder}</code>\n\n`;
+            
+            orderText += `<b>SUMMARY :</b>\n`;
+            orderText += `${safeNama} // ${safeAlamat} // ${order.cp}\n\n`;
+            
+            orderText += `<b>CREATE :</b> <code>${order.tglCreate}</code>\n`;
+            orderText += `<b>MANJA :</b> <code>${order.tglManja}</code>\n\n`;
+            
+            orderText += `💬 <a href="${waLink}">WA</a> | 📍 <a href="${mapsLink}">Maps</a>\n\n`;
+            
+            orderText += `<b>TEKNISI :</b>\n`;
+            orderText += `<b>${selectedTech}</b>`;
+
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            showToast('Mulai mengirim pesan ke Telegram...');
+            showToast('Mengirim tugas ke Telegram...');
 
             try {
-
-                // 2. KIRIM ORDER SATU PER SATU (Di-looping agar tidak terlalu panjang)
-                for (let index = 0; index < filtered.length; index++) {
-                    const order = filtered[index];
-                    const typeOrder = order.typeOrder && order.typeOrder !== '-' ? order.typeOrder : 'CREATE';
-                    const phone = order.cp && order.cp !== '-' ? order.cp.replace(/\D/g, '') : '';
-                    const waLink = phone ? `https://wa.me/${phone}` : '#';
-                    const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.alamat || '')}`;
-
-                    const safeNama = (order.nama || '-').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    const safeAlamat = (order.alamat || '-').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-                    let orderText = `📦 <b>ORDER ${index + 1} DARI ${filtered.length}</b>\n`;
-                    orderText += `--------------------------------\n`;
-                    orderText += `<b>ORDER PSB SA ${order.sto}</b>\n`;
-                    orderText += `#${typeOrder.replace(/\s+/g, '_')}_${order.sto}\n\n`;
-                    
-                    orderText += `<b>TGL ORDER :</b> <code>${order.tanggal}</code>\n`;
-                    orderText += `<b>HOMEPASS ID :</b> <code>${order.homepassId}</code>\n`;
-                    orderText += `<b>ODP :</b> <code>${order.odp}</code>\n\n`;
-                    
-                    orderText += `<b>TYPE | STO | PAKET :</b>\n`;
-                    orderText += `<code>${typeOrder} | ${order.sto} | ${order.paket}</code>\n\n`;
-                    
-                    orderText += `<b>WONUM | NO SERVICE :</b>\n`;
-                    orderText += `<code>${order.wonum} | ${order.noService}</code>\n\n`;
-                    
-                    orderText += `<b>NO ORDER :</b>\n`;
-                    orderText += `<code>${order.noOrder}</code>\n\n`;
-                    
-                    orderText += `<b>SUMMARY :</b>\n`;
-                    orderText += `${safeNama} // ${safeAlamat} // ${order.cp}\n\n`;
-                    
-                    orderText += `<b>CREATE :</b> <code>${order.tglCreate}</code>\n`;
-                    orderText += `<b>MANJA :</b> <code>${order.tglManja}</code>\n\n`;
-                    
-                    orderText += `💬 <a href="${waLink}">WA</a> | 📍 <a href="${mapsLink}">Maps</a>\n\n`;
-                    
-                    orderText += `<b>TEKNISI :</b>\n`;
-                    orderText += `<b>${order.teknisi}</b>`;
-
-                    // Kirim pesan per order
-                    await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: TARGET_CHAT_ID,
-                            text: orderText,
-                            parse_mode: 'HTML',
-                            disable_web_page_preview: true
-                        })
-                    });
-
-                    // Jeda 300ms agar urutan masuk di Telegram tidak terbalik dan tidak dianggap spam
-                    await new Promise(resolve => setTimeout(resolve, 300));
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TARGET_CHAT_ID,
+                        text: orderText,
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if(data.ok) {
+                    showToast(`✅ Tugas WONUM ${order.wonum} berhasil dikirim ke ${selectedTech}!`);
+                } else {
+                    alert('Gagal mengirim! Error Telegram: ' + data.description);
                 }
-
-                showToast(`✅ Berhasil! ${filtered.length} order untuk ${techName} terkirim.`);
-
             } catch (error) {
-                alert('Gagal mengirim sebagian/seluruh pesan! Pastikan ada koneksi internet.');
+                alert('Koneksi terputus! Pastikan ada internet dan Token valid.');
                 console.error(error);
             }
         }
@@ -1804,7 +1775,7 @@
                         <td class="p-2 font-mono">${item.wonum || '-'}</td>
                         <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] ${getStatusBadgeClass(item.status)}">${item.status}</span></td>
                         <td class="p-2 text-center">${durasiHtml}</td>
-                        <td class="p-2 text-slate-600 wrap-cell">${item.keterangan || '-'}</td>
+                        <td class="p-2 wrap-cell">${getEditableKeterangan(item.wonum, item.keterangan)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -1812,6 +1783,7 @@
             lucide.createIcons();
             document.getElementById('techDetailModal').classList.remove('hidden');
         }
+
         function closeTechModal() { document.getElementById('techDetailModal').classList.add('hidden'); }
 
         // Fungsi Modal Detail Khusus untuk halaman Dispatch (Filter berdasarkan STO, bukan Mitra)
@@ -2302,7 +2274,7 @@
                         <td class="p-2 font-mono">${item.wonum || '-'}</td>
                         <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[10px] ${getStatusBadgeClass(item.status)}">${item.status}</span></td>
                         <td class="p-2 text-center">${durasiHtml}</td>
-                        <td class="p-2 text-slate-600 wrap-cell">${item.keterangan || '-'}</td>
+                        <td class="p-2 wrap-cell">${getEditableKeterangan(item.wonum, item.keterangan)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -2314,6 +2286,51 @@
 
         function closeKpiModal() {
             document.getElementById('kpiDetailModal').classList.add('hidden');
+        }
+
+        // =====================================
+        // FITUR EDIT KETERANGAN (PENSIL & SAVE)
+        // =====================================
+        
+        // 1. Fungsi pembuat elemen tombol pensil
+        function getEditableKeterangan(wonum, ket) {
+            // Kalau tidak ada wonum, jangan tampilkan tombol edit
+            if (!wonum || wonum === '-') return `<span class="text-slate-600">${ket || '-'}</span>`;
+            
+            const safeWonum = wonum.replace(/\s+/g, '');
+            return `
+                <div class="group flex justify-between items-start gap-2">
+                    <span id="text-ket-${safeWonum}" class="flex-1 text-slate-600 leading-tight">${ket || '-'}</span>
+                    <button onclick="editKeteranganPrompt('${safeWonum}')" class="text-slate-400 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity p-1 bg-slate-100 hover:bg-blue-50 rounded shadow-sm border border-slate-200" title="Edit Keterangan">
+                        <i data-lucide="pencil" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        // 2. Fungsi eksekusi simpan saat pensil diklik
+        function editKeteranganPrompt(wonum) {
+            // Cari data aslinya
+            const target = rawData.find(r => r.wonum && r.wonum.replace(/\s+/g, '') === wonum);
+            if (!target) return;
+            
+            // Munculkan popup ketik teks
+            const currentKet = target.keterangan && target.keterangan !== '-' ? target.keterangan : '';
+            const newKet = prompt("Ubah Keterangan untuk WONUM " + target.wonum + ":", currentKet);
+            
+            // Jika user menekan tombol "OK" (bukan Cancel)
+            if (newKet !== null) { 
+                target.keterangan = newKet.trim(); // Simpan data baru
+                
+                // Ganti teks langsung di layar modal saat ini
+                const spanEl = document.getElementById('text-ket-' + wonum);
+                if (spanEl) spanEl.textContent = newKet.trim() || '-';
+                
+                // Render ulang seluruh tabel di balik layar agar datanya sinkron
+                renderAll(); 
+                showToast("✅ Keterangan WONUM " + target.wonum + " berhasil disimpan!");
+                lucide.createIcons();
+            }
         }
     </script>
 </body>
