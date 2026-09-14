@@ -396,6 +396,7 @@
                         <table class="w-full text-xs text-left text-slate-700 whitespace-nowrap">
                             <thead class="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
                                 <tr>
+                                    <th class="px-3 py-3 text-center w-8"></th>
                                     <th class="px-3 py-3 text-center w-10">No</th>
                                     <th class="px-3 py-3">SA</th>
                                     <th class="px-3 py-3">STO</th>
@@ -1485,27 +1486,25 @@
 
             mitraFilteredData.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50";
+                tr.className = "hover:bg-slate-50 transition-colors";
 
                 const wonum = item.wonum || '-';
+                const safeWonumId = wonum.replace(/\s+/g, '') + '-' + index; // ID Unik
                 const noOrder = item.noOrder || '-';
                 const noService = item.noService || item.cp || '-';
                 const alamat = item.alamat || '-';
                 const sto = item.sto || '-';
-                const sa = item.sa || '-'; // Ambil data SA dari order ini
+                const sa = item.sa || '-'; 
 
-                // LOGIKA PINTAR: Cari teknisi HANYA yang melayani SA dan Mitra ini
                 let techsInSa = rawData.filter(r => r.mitra === activeDispatchMitra && r.sa === sa)
                                        .map(r => r.teknisi)
                                        .filter(t => t && t !== '-');
                 
-                // Jaga-jaga: Kalau SA ini belum ada teknisinya, munculkan semua teknisi di Mitra tersebut
                 if (techsInSa.length === 0) {
                     techsInSa = rawData.filter(r => r.mitra === activeDispatchMitra)
                                        .map(r => r.teknisi)
                                        .filter(t => t && t !== '-');
                 }
-                
                 const uniqueTechs = [...new Set(techsInSa)].sort();
 
                 let techOptions = '';
@@ -1515,7 +1514,13 @@
 
                 const defaultTech = (item.teknisi && item.teknisi !== '-') ? item.teknisi : '';
 
+                // BARIS 1: TABEL UTAMA (Dengan tombol expand)
                 tr.innerHTML = `
+                    <td class="px-3 py-2.5 text-center">
+                        <button onclick="toggleExpand('${safeWonumId}')" class="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors focus:outline-none">
+                            <i data-lucide="chevron-right" id="icon-${safeWonumId}" class="w-4 h-4 transition-transform duration-200"></i>
+                        </button>
+                    </td>
                     <td class="px-3 py-2.5 text-center font-semibold text-slate-500">${index + 1}</td>
                     <td class="px-3 py-2.5 font-bold text-slate-800 uppercase">${sa}</td>
                     <td class="px-3 py-2.5 font-bold text-slate-800 uppercase">${sto}</td>
@@ -1538,13 +1543,131 @@
                         </datalist>
                     </td>
                     <td class="px-3 py-2.5 text-center">
-                        <button onclick="sendSingleTaskTelegram(${index})" class="inline-flex items-center justify-center gap-1 bg-[#0088cc] hover:bg-[#0077b3] text-white px-3 py-1.5 rounded-lg font-bold text-xs transition shadow-sm">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim
-                        </button>
+                        <div class="flex items-center justify-center gap-2">
+                            <!-- Tombol Buka Lembar Kerja (Pop-up) -->
+                            <button onclick="openModalLembarKerja(${index})" class="inline-flex items-center justify-center p-1.5 bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-lg border border-slate-300 transition shadow-sm" title="Buka Lembar Kerja">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                            
+                            <!-- Tombol Kirim Telegram -->
+                            <button onclick="sendSingleTaskTelegram(${index})" class="inline-flex items-center justify-center gap-1 bg-[#0088cc] hover:bg-[#0077b3] text-white px-3 py-1.5 rounded-lg font-bold text-xs transition shadow-sm">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> Kirim
+                            </button>
+                        </div>
                     </td>
                 `;
+
+                // BARIS 2: LEMBAR KERJA SENTRAVA STYLE (Hidden default)
+                const expandTr = document.createElement('tr');
+                expandTr.id = `expand-${safeWonumId}`;
+                expandTr.className = "hidden bg-slate-100/50 border-b-2 border-blue-500";
+                
+                expandTr.innerHTML = `
+                    <td colspan="10" class="p-0">
+                        <div class="p-4 sm:p-6 bg-slate-50 shadow-inner">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                
+                                <!-- KIRI: INFO ORDER & WORKORDER ANAK -->
+                                <div class="space-y-4">
+                                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                                        <h4 class="font-bold text-slate-800 text-xs uppercase mb-3 border-b pb-2 flex items-center gap-2">
+                                            <i data-lucide="info" class="w-4 h-4 text-blue-500"></i> Informasi Order
+                                        </h4>
+                                        <div class="grid grid-cols-3 gap-y-3 text-[11px]">
+                                            <div class="text-slate-500">Nama Pelanggan</div>
+                                            <div class="font-semibold col-span-2">${item.nama || '-'}</div>
+                                            
+                                            <div class="text-slate-500">Kontak (CP)</div>
+                                            <div class="font-semibold col-span-2">${item.cp || '-'}</div>
+                                            
+                                            <div class="text-slate-500">Paket</div>
+                                            <div class="font-semibold text-blue-600 col-span-2">${item.paket || '-'}</div>
+                                            
+                                            <div class="text-slate-500">Alamat</div>
+                                            <div class="font-semibold col-span-2 bg-slate-50 p-2 rounded border border-slate-100 leading-relaxed">${item.alamat || '-'}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                                        <div class="grid grid-cols-2 gap-4 text-[11px]">
+                                            <div>
+                                                <span class="block text-slate-500 mb-0.5">Tanggal Create</span>
+                                                <span class="font-bold text-slate-800">${item.tglCreate || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span class="block text-slate-500 mb-0.5">Tanggal Booking / Manja</span>
+                                                <span class="font-bold text-slate-800">${item.tglManja || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span class="block text-slate-500 mb-0.5">Homepass ID</span>
+                                                <span class="font-bold font-mono text-slate-800">${item.homepassId || '-'}</span>
+                                            </div>
+                                            <div>
+                                                <span class="block text-slate-500 mb-0.5">ODP</span>
+                                                <span class="font-bold text-emerald-600">${item.odp || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- KANAN: ENRICHMENT TEKNIS & UPDATE KENDALA -->
+                                <div class="space-y-4">
+                                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                                        <h4 class="font-bold text-slate-800 text-xs uppercase mb-3 border-b pb-2 flex justify-between items-center">
+                                            <span class="flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4 text-emerald-500"></i> Enrichment Teknis</span>
+                                            <span class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold tracking-wide">ISIAN TEKNISI</span>
+                                        </h4>
+                                        <div class="grid grid-cols-2 gap-3 text-[11px]">
+                                            <div>
+                                                <label class="block font-semibold text-slate-600 mb-1">SN ONT (Modem)</label>
+                                                <input type="text" placeholder="Masukkan SN..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
+                                            </div>
+                                            <div>
+                                                <label class="block font-semibold text-slate-600 mb-1">Port ODP</label>
+                                                <input type="text" placeholder="Contoh: 01" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label class="block font-semibold text-slate-600 mb-1">Koordinat Aktual</label>
+                                                <div class="flex gap-2">
+                                                    <input type="text" placeholder="Latitude, Longitude" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
+                                                    <button class="bg-slate-200 hover:bg-slate-300 px-3 rounded-lg transition-colors text-slate-600" title="Get Location">
+                                                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                                        <h4 class="font-bold text-slate-800 text-xs uppercase mb-3 border-b pb-2 flex justify-between items-center">
+                                            <span class="flex items-center gap-2"><i data-lucide="message-square-dashed" class="w-4 h-4 text-purple-500"></i> Update Dispatch / Kendala</span>
+                                            <span class="text-[9px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">${item.status}</span>
+                                        </h4>
+                                        <div class="space-y-3 text-[11px]">
+                                            <div>
+                                                <label class="block font-semibold text-slate-600 mb-1">Keterangan Laporan (Saat Ini)</label>
+                                                <textarea id="ket-textarea-${safeWonumId}" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow leading-relaxed" placeholder="Tuliskan keterangan detail di sini...">${item.keterangan !== '-' ? item.keterangan : ''}</textarea>
+                                            </div>
+                                            <div class="flex justify-end pt-1">
+                                                <button onclick="editKeteranganPrompt('${wonum.replace(/\s+/g, '')}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold transition-colors flex items-center gap-1.5 shadow-sm">
+                                                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Simpan
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                `;
+
                 tbody.appendChild(tr);
+                tbody.appendChild(expandTr); // Masukkan lembar kerja persis di bawah baris utamanya
             });
+
+            // Re-render icon lucide setelah elemen baru tercipta
+            lucide.createIcons();
 
             lucide.createIcons();
         }
@@ -2332,6 +2455,162 @@
                 lucide.createIcons();
             }
         }
+
+        function toggleExpand(id) {
+            const expandRow = document.getElementById(`expand-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+
+            if (expandRow.classList.contains('hidden')) {
+                expandRow.classList.remove('hidden');
+                icon.classList.add('rotate-90');
+            } else {
+                expandRow.classList.add('hidden');
+                icon.classList.remove('rotate-90');
+            }
+        }
+
+        function openModalLembarKerja(index) {
+            // Ambil data spesifik berdasarkan baris yang diklik
+            const item = window.mitraFilteredData[index]; 
+            
+            // Tembakkan data ke ID di dalam HTML Pop-Up
+            document.getElementById('modal-wonum').innerText = "WONUM: " + (item.wonum || '-');
+            document.getElementById('modal-nama').innerText = item.nama || '-';
+            document.getElementById('modal-cp').innerText = item.cp || item.noService || '-';
+            document.getElementById('modal-paket').innerText = item.paket || '-';
+            document.getElementById('modal-alamat').innerText = item.alamat || '-';
+            
+            // Tampilkan keterangan jika sebelumnya sudah ada
+            document.getElementById('modal-keterangan').value = item.keterangan !== '-' ? item.keterangan : '';
+            
+            // Munculkan Modal
+            document.getElementById('modal-lembar-kerja').classList.remove('hidden');
+            
+            // Render ulang icon jika ada yang baru
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function closeModalLembarKerja() {
+            // Sembunyikan Modal
+            document.getElementById('modal-lembar-kerja').classList.add('hidden');
+        }
     </script>
+
+    <!-- MODAL LEMBAR KERJA (POP-UP) -->
+<div id="modal-lembar-kerja" class="hidden fixed inset-0 z-[999] bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4">
+    <!-- Kotak Modal -->
+    <div class="bg-slate-50 w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        
+        <!-- HEADER POP-UP -->
+        <div class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0">
+            <div>
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="layout-template" class="w-5 h-5 text-blue-600"></i> 
+                    Lembar Kerja Tiket
+                </h3>
+                <p id="modal-wonum" class="text-sm font-mono text-indigo-600 font-semibold mt-1">WONUM: -</p>
+            </div>
+            <button onclick="closeModalLembarKerja()" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- ISI POP-UP (Bisa di-scroll) -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- BAGIAN KIRI: INFO ORDER -->
+                <div class="space-y-4 lg:col-span-1">
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                        <h4 class="font-bold text-slate-800 text-xs uppercase mb-4 border-b pb-2">Informasi Pelanggan</h4>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <div class="text-slate-500 text-xs">Nama</div>
+                                <div id="modal-nama" class="font-semibold text-slate-800">-</div>
+                            </div>
+                            <div>
+                                <div class="text-slate-500 text-xs">No. Kontak / CP</div>
+                                <div id="modal-cp" class="font-semibold text-slate-800">-</div>
+                            </div>
+                            <div>
+                                <div class="text-slate-500 text-xs">Paket</div>
+                                <div id="modal-paket" class="font-bold text-blue-600">-</div>
+                            </div>
+                            <div>
+                                <div class="text-slate-500 text-xs mb-1">Alamat</div>
+                                <div id="modal-alamat" class="font-medium text-slate-700 bg-slate-50 p-2 rounded border border-slate-100">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BAGIAN KANAN: ENRICHMENT TEKNIS & STATUS -->
+                <div class="space-y-6 lg:col-span-2">
+                    
+                    <!-- Form Teknis ala Sentrava (Hybrid) -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h4 class="font-bold text-slate-800 text-xs uppercase flex items-center gap-2">
+                                <i data-lucide="cpu" class="w-4 h-4 text-emerald-500"></i> Enrichment Teknis
+                            </h4>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                            <!-- Kolom Fungsional -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">SN ONT (Modem)</label>
+                                <input type="text" placeholder="Ketik SN..." class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Port ODP</label>
+                                <input type="text" placeholder="Contoh: 01" class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
+                            </div>
+                            
+                            <!-- Kolom "Pajangan" ala Sentrava -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">Bandwidth</label>
+                                <input type="text" disabled placeholder="Auto" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">VLAN Internet</label>
+                                <input type="text" disabled placeholder="Auto" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-xs font-semibold text-slate-400 mb-1">OLT / Slot</label>
+                                <input type="text" disabled placeholder="Tarik dari sistem pusat..." class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                                Simpan Teknis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Update Status & Keterangan -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h4 class="font-bold text-slate-800 text-xs uppercase flex items-center gap-2">
+                                <i data-lucide="message-square" class="w-4 h-4 text-orange-500"></i> Update Dispatch
+                            </h4>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Keterangan / Kendala Lapangan</label>
+                            <textarea id="modal-keterangan" rows="3" class="w-full bg-white border border-slate-300 rounded p-3 text-slate-800 focus:border-blue-500 outline-none" placeholder="Tuliskan progress atau kendala teknisi..."></textarea>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
+                                Update Status
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
