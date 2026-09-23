@@ -78,7 +78,7 @@ foreach ($rows as $row) {$cols = $xpath->query('td',$row);
             $total_update++;
             
         } else {
-            
+            //
             // Semua kolom yang tadinya spasi diganti underscore (no_order, type_order, no_service, dll)
             $sql_insert = "INSERT INTO data_order (tanggal, teknisi, sto, no_order, type_order, wonum, no_service, nama, cp, alamat, tgl_create, tgl_manja, odp, paket, homepass_id, status_order, sub_kendala, keterangan, mitra, sa) VALUES ('$tanggal', '', '$sto', '$no_order', '$type_order', '$wonum', '$no_service', '$nama', '$cp', '', '$tgl_create', '$tgl_manja', '', '', '', '$status_order', '', '', '$mitra', '')";
             $conn->query($sql_insert);
