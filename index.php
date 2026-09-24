@@ -117,7 +117,7 @@
         <div id="sidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden hidden"></div>
 
         <!-- Vertical Sidebar (Collapsible / Slide on Hover) -->
-        <aside id="appSidebar" class="sidebar-transition bg-slate-900 text-slate-300 w-64 lg:w-20 lg:hover:w-64 fixed lg:static inset-y-0 left-0 z-40 flex flex-col border-r border-slate-800 shadow-xl overflow-y-auto no-print group">
+        <aside id="appSidebar" class="sidebar-transition bg-slate-900 text-slate-300 w-64 lg:w-20 lg:hover:w-64 fixed lg:static inset-y-0 left-0 z-40 flex flex-col border-r border-slate-800 shadow-xl overflow-y-auto overflow-x-hidden no-print group">
             
             <div class="p-4 border-b border-slate-800 flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-400 lg:group-hover:inline lg:hidden">Menu Navigasi</span>
@@ -129,7 +129,9 @@
             <div class="flex-1 py-4 px-3 space-y-6">
                 <!-- Group 1: Menu Utama -->
                 <div class="space-y-1">
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Menu Utama</p>
+                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">
+                        Menu Utama
+                    </p>
                     <button onclick="switchTab('table')" id="tab-table" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition">
                         <i data-lucide="table" class="w-4 h-4 shrink-0"></i>
                         <span class="truncate lg:group-hover:inline lg:hidden">Tabel Laporan (Pivot)</span>
@@ -146,7 +148,7 @@
 
                 <!-- Group 2: Monitoring Kendala -->
                 <div class="space-y-1">
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Monitoring Kendala</p>
+                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">Monitoring Kendala</p>
                     <!-- Tombol ACT (Activation Completed) -->
                     <button onclick="switchTab('act')" id="tab-act" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                         <div class="flex items-center space-x-3 truncate">
@@ -187,7 +189,7 @@
 
                 <!-- Group 3: Analisis & Tren -->
                 <div class="space-y-1">
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Analisis & Tren</p>
+                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">Analisis & Tren</p>
                     <button onclick="switchTab('analytics')" id="tab-analytics" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                         <i data-lucide="pie-chart" class="w-4 h-4 shrink-0"></i>
                         <span class="truncate lg:group-hover:inline lg:hidden">Grafik & Statistik</span>
@@ -197,7 +199,7 @@
                             <i data-lucide="database" class="w-4 h-4 shrink-0"></i>
                             <span class="truncate lg:group-hover:inline lg:hidden">Data Mentah</span>
                         </div>
-                        <span id="rawCount" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0">0</span>
+                        <span id="rawCount" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 lg:group-hover:inline lg:hidden">0</span>
                     </button>
                 </div>
             </div>
@@ -1544,9 +1546,12 @@
                     </td>
                     <td class="px-3 py-2.5 text-center">
                         <div class="flex items-center justify-center gap-2">
-                            <!-- Tombol Buka Lembar Kerja (Pop-up) -->
-                            <button onclick="openModalLembarKerja(${index})" class="inline-flex items-center justify-center p-1.5 bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-lg border border-slate-300 transition shadow-sm" title="Buka Lembar Kerja">
-                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            <button
+                                type="button"
+                                onclick="openModalLembarKerja('${wonum.replace(/'/g, "\\'")}')"
+                                title="Lembar Kerja"
+                            >
+                                <i data-lucide="file-text"></i>
                             </button>
                             
                             <!-- Tombol Kirim Telegram -->
@@ -1584,7 +1589,8 @@
                                             <div class="font-semibold text-blue-600 col-span-2">${item.paket || '-'}</div>
                                             
                                             <div class="text-slate-500">Alamat</div>
-                                            <div class="font-semibold col-span-2 bg-slate-50 p-2 rounded border border-slate-100 leading-relaxed">${item.alamat || '-'}</div>
+                                            <div class="font-semibold col-span-2 min-w-0 w-full bg-slate-50 p-2 rounded border border-slate-100 leading-relaxed" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; overflow: hidden;">${item.alamat || '-'}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -2230,28 +2236,34 @@
             ['table', 'teknisi','dispatch', 'act', 'ikroke', 'ikrnok', 'kendalateknik', 'kendalapelanggan', 'analytics', 'raw'].forEach(t => {
                 const btn = document.getElementById('tab-' + t);
                 const view = document.getElementById('view-' + t);
+                
                 if (btn) {
+                    // 1. Hapus warna state aktif & tidak aktif sebelumnya tanpa merusak layout dasar
+                    btn.classList.remove('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold', 'text-slate-300', 'hover:bg-slate-800', 'font-medium');
+
                     if (t === tabName) {
-                        btn.className = t === 'ai' 
-                            ? "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-indigo-300 bg-indigo-900/80 transition border border-indigo-500/30"
-                            : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition";
+                        // 2. Terapkan warna saat tombol Aktif (Dipencet)
+                        btn.classList.add('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold');
                     } else {
-                        btn.className = t === 'ai'
-                            ? "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-indigo-300 bg-indigo-950/50 hover:bg-indigo-900/60 transition border border-indigo-500/20"
-                            : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition";
+                        // 3. Terapkan warna saat tombol Tidak Aktif
+                        btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white', 'font-medium');
                     }
                 }
+                
                 if (view) {
                     if (t === tabName) view.classList.remove('hidden');
                     else view.classList.add('hidden');
                 }
             });
+
+            // Menutup sidebar di tampilan mobile saat menu diklik
             if (window.innerWidth < 1024) {
                 const sidebar = document.getElementById('appSidebar');
                 const backdrop = document.getElementById('sidebarBackdrop');
                 sidebar.classList.add('-translate-x-full');
                 backdrop.classList.add('hidden');
             }
+            
             if (tabName === 'analytics') renderAnalytics();
         }
 
@@ -2649,24 +2661,38 @@
             }
         }
 
-        function openModalLembarKerja(index) {
-            // Ambil data spesifik berdasarkan baris yang diklik
-            const item = window.mitraFilteredData[index]; 
-            
-            // Tembakkan data ke ID di dalam HTML Pop-Up
-            document.getElementById('modal-wonum').innerText = "WONUM: " + (item.wonum || '-');
-            document.getElementById('modal-nama').innerText = item.nama || '-';
-            document.getElementById('modal-cp').innerText = item.cp || item.noService || '-';
-            document.getElementById('modal-paket').innerText = item.paket || '-';
-            document.getElementById('modal-alamat').innerText = item.alamat || '-';
-            
-            // Tampilkan keterangan jika sebelumnya sudah ada
-            document.getElementById('modal-keterangan').value = item.keterangan !== '-' ? item.keterangan : '';
-            
-            // Munculkan Modal
+        function openModalLembarKerja(wonum) {
+            const normalizedWonum = String(wonum || '')
+                .replace(/\s+/g, '')
+                .trim();
+
+            const item = Array.isArray(rawData)
+                ? rawData.find(row =>
+                    row &&
+                    row.wonum &&
+                    String(row.wonum)
+                        .replace(/\s+/g, '')
+                        .trim() === normalizedWonum
+                )
+                : null;
+
+            if (!item) {
+                console.error('Data WONUM tidak ditemukan:', wonum);
+                showToast('Data WONUM tidak ditemukan', 'error');
+                return;
+            }
+
+            document.getElementById('modal-wonum').innerText =
+                'WONUM: ' + (item.wonum || '-');
+
+            // Isi field lain kalau memang ada
+            // document.getElementById(...).value = item....
+
             document.getElementById('modal-lembar-kerja').classList.remove('hidden');
-            
-            // Render ulang icon jika ada yang baru
+
+            fillWorksheetFields(item.wonum, 'modal');
+            loadWorksheetHistory(item.wonum);
+
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
@@ -2676,6 +2702,10 @@
             // Sembunyikan Modal
             document.getElementById('modal-lembar-kerja').classList.add('hidden');
         }
+
+        setInterval(function() {
+            location.reload();
+        }, 300000);
     </script>
 
     <!-- MODAL LEMBAR KERJA (POP-UP) -->
@@ -2719,8 +2749,11 @@
                                 <div id="modal-paket" class="font-bold text-blue-600">-</div>
                             </div>
                             <div>
-                                <div class="text-slate-500 text-xs mb-1">Alamat</div>
-                                <div id="modal-alamat" class="font-medium text-slate-700 bg-slate-50 p-2 rounded border border-slate-100">-</div>
+                                <div id="modal-alamat"
+                                    class="font-medium text-slate-700 bg-slate-50 p-2 rounded border border-slate-100"
+                                    style="white-space: normal; overflow-wrap: anywhere; word-break: normal;">
+                                    -
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2811,24 +2844,10 @@
                         </div>
                     </div>
 
-
-                    <!-- RIWAYAT PERUBAHAN -->
-                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                        <div class="flex justify-between items-center mb-4 border-b pb-2">
-                            <h4 class="font-bold text-slate-800 text-xs uppercase flex items-center gap-2">
-                                <i data-lucide="history" class="w-4 h-4 text-indigo-500"></i> Riwayat Lembar Kerja
-                            </h4>
-                            <span class="text-[9px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded font-bold">20 TERAKHIR</span>
-                        </div>
-                        <div id="modal-history" class="max-h-64 overflow-y-auto">
-                            <div class="text-xs text-slate-400">Belum ada riwayat.</div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-</html>
+</html>     
