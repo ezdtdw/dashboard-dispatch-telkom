@@ -117,11 +117,7 @@
         <div id="sidebarBackdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden hidden"></div>
 
         <!-- Vertical Sidebar (Collapsible / Slide on Hover) -->
-<<<<<<< HEAD
-        <aside id="appSidebar" class="sidebar-transition bg-slate-900 text-slate-300 w-64 lg:w-20 lg:hover:w-64 fixed lg:static inset-y-0 left-0 z-40 flex flex-col border-r border-slate-800 shadow-xl overflow-y-auto overflow-x-hidden no-print group">
-=======
         <aside id="appSidebar" class="sidebar-transition bg-slate-900 text-slate-300 w-64 lg:w-20 lg:hover:w-64 fixed lg:static inset-y-0 left-0 z-40 flex flex-col border-r border-slate-800 shadow-xl overflow-y-auto no-print group">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             
             <div class="p-4 border-b border-slate-800 flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-400 lg:group-hover:inline lg:hidden">Menu Navigasi</span>
@@ -133,13 +129,7 @@
             <div class="flex-1 py-4 px-3 space-y-6">
                 <!-- Group 1: Menu Utama -->
                 <div class="space-y-1">
-<<<<<<< HEAD
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">
-                        Menu Utama
-                    </p>
-=======
                     <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Menu Utama</p>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                     <button onclick="switchTab('table')" id="tab-table" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition">
                         <i data-lucide="table" class="w-4 h-4 shrink-0"></i>
                         <span class="truncate lg:group-hover:inline lg:hidden">Tabel Laporan (Pivot)</span>
@@ -156,11 +146,7 @@
 
                 <!-- Group 2: Monitoring Kendala -->
                 <div class="space-y-1">
-<<<<<<< HEAD
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">Monitoring Kendala</p>
-=======
                     <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Monitoring Kendala</p>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                     <!-- Tombol ACT (Activation Completed) -->
                     <button onclick="switchTab('act')" id="tab-act" class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                         <div class="flex items-center space-x-3 truncate">
@@ -201,11 +187,7 @@
 
                 <!-- Group 3: Analisis & Tren -->
                 <div class="space-y-1">
-<<<<<<< HEAD
-                    <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider lg:group-hover:block lg:hidden">Analisis & Tren</p>
-=======
                     <p class="text-[10px] font-bold uppercase text-slate-500 px-3 mb-2 tracking-wider">Analisis & Tren</p>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                     <button onclick="switchTab('analytics')" id="tab-analytics" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                         <i data-lucide="pie-chart" class="w-4 h-4 shrink-0"></i>
                         <span class="truncate lg:group-hover:inline lg:hidden">Grafik & Statistik</span>
@@ -215,11 +197,7 @@
                             <i data-lucide="database" class="w-4 h-4 shrink-0"></i>
                             <span class="truncate lg:group-hover:inline lg:hidden">Data Mentah</span>
                         </div>
-<<<<<<< HEAD
-                        <span id="rawCount" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 lg:group-hover:inline lg:hidden">0</span>
-=======
                         <span id="rawCount" class="bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0">0</span>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                     </button>
                 </div>
             </div>
@@ -1539,11 +1517,7 @@
                 // BARIS 1: TABEL UTAMA (Dengan tombol expand)
                 tr.innerHTML = `
                     <td class="px-3 py-2.5 text-center">
-<<<<<<< HEAD
                         <button onclick="toggleExpand('${safeWonumId}', '${wonum.replace(/'/g, "\\'")}')" class="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors focus:outline-none">
-=======
-                        <button onclick="toggleExpand('${safeWonumId}')" class="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors focus:outline-none">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             <i data-lucide="chevron-right" id="icon-${safeWonumId}" class="w-4 h-4 transition-transform duration-200"></i>
                         </button>
                     </td>
@@ -1570,18 +1544,9 @@
                     </td>
                     <td class="px-3 py-2.5 text-center">
                         <div class="flex items-center justify-center gap-2">
-<<<<<<< HEAD
-                            <button
-                                type="button"
-                                onclick="openModalLembarKerja('${wonum.replace(/'/g, "\\'")}')"
-                                title="Lembar Kerja"
-                            >
-                                <i data-lucide="file-text"></i>
-=======
                             <!-- Tombol Buka Lembar Kerja (Pop-up) -->
                             <button onclick="openModalLembarKerja(${index})" class="inline-flex items-center justify-center p-1.5 bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-lg border border-slate-300 transition shadow-sm" title="Buka Lembar Kerja">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </button>
                             
                             <!-- Tombol Kirim Telegram -->
@@ -1619,12 +1584,7 @@
                                             <div class="font-semibold text-blue-600 col-span-2">${item.paket || '-'}</div>
                                             
                                             <div class="text-slate-500">Alamat</div>
-<<<<<<< HEAD
-                                            <div class="font-semibold col-span-2 min-w-0 w-full bg-slate-50 p-2 rounded border border-slate-100 leading-relaxed" style="white-space: normal; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; overflow: hidden;">${item.alamat || '-'}
-                                            </div>
-=======
                                             <div class="font-semibold col-span-2 bg-slate-50 p-2 rounded border border-slate-100 leading-relaxed">${item.alamat || '-'}</div>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                                         </div>
                                     </div>
 
@@ -1660,35 +1620,21 @@
                                         <div class="grid grid-cols-2 gap-3 text-[11px]">
                                             <div>
                                                 <label class="block font-semibold text-slate-600 mb-1">SN ONT (Modem)</label>
-<<<<<<< HEAD
                                                 <input id="expand-sn-ont-${safeWonumId}" type="text" placeholder="Masukkan SN..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
                                             </div>
                                             <div>
                                                 <label class="block font-semibold text-slate-600 mb-1">Port ODP</label>
                                                 <input id="expand-port-odp-${safeWonumId}" type="text" placeholder="Contoh: 01" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
-=======
-                                                <input type="text" placeholder="Masukkan SN..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
-                                            </div>
-                                            <div>
-                                                <label class="block font-semibold text-slate-600 mb-1">Port ODP</label>
-                                                <input type="text" placeholder="Contoh: 01" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                                             </div>
                                             <div class="col-span-2">
                                                 <label class="block font-semibold text-slate-600 mb-1">Koordinat Aktual</label>
                                                 <div class="flex gap-2">
-<<<<<<< HEAD
                                                     <input id="expand-koordinat-${safeWonumId}" type="text" placeholder="Latitude, Longitude" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
                                                     <button onclick="getCurrentCoordinates('expand', '${safeWonumId}')" class="bg-slate-200 hover:bg-slate-300 px-3 rounded-lg transition-colors text-slate-600" title="Ambil lokasi perangkat">
-=======
-                                                    <input type="text" placeholder="Latitude, Longitude" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
-                                                    <button class="bg-slate-200 hover:bg-slate-300 px-3 rounded-lg transition-colors text-slate-600" title="Get Location">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                                                         <i data-lucide="map-pin" class="w-4 h-4"></i>
                                                     </button>
                                                 </div>
                                             </div>
-<<<<<<< HEAD
                                             <div class="col-span-2">
                                                 <label class="block font-semibold text-slate-600 mb-1">Hasil Pekerjaan</label>
                                                 <select id="expand-hasil-${safeWonumId}" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
@@ -1702,8 +1648,6 @@
                                                 <label class="block font-semibold text-slate-600 mb-1">Kendala Lapangan</label>
                                                 <input id="expand-kendala-${safeWonumId}" type="text" placeholder="Isi jika ada kendala..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:border-blue-500 transition-shadow">
                                             </div>
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                                         </div>
                                     </div>
 
@@ -1715,19 +1659,11 @@
                                         <div class="space-y-3 text-[11px]">
                                             <div>
                                                 <label class="block font-semibold text-slate-600 mb-1">Keterangan Laporan (Saat Ini)</label>
-<<<<<<< HEAD
                                                 <textarea id="expand-keterangan-${safeWonumId}" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow leading-relaxed" placeholder="Tuliskan keterangan detail di sini...">${item.keterangan !== '-' ? item.keterangan : ''}</textarea>
                                             </div>
                                             <div class="flex justify-end pt-1">
                                                 <button onclick="saveLembarKerja('${wonum.replace(/'/g, "\\'")}', 'expand', '${safeWonumId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold transition-colors flex items-center gap-1.5 shadow-sm">
                                                     <i data-lucide="save" class="w-3.5 h-3.5"></i> Simpan Lembar Kerja
-=======
-                                                <textarea id="ket-textarea-${safeWonumId}" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500 transition-shadow leading-relaxed" placeholder="Tuliskan keterangan detail di sini...">${item.keterangan !== '-' ? item.keterangan : ''}</textarea>
-                                            </div>
-                                            <div class="flex justify-end pt-1">
-                                                <button onclick="editKeteranganPrompt('${wonum.replace(/\s+/g, '')}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold transition-colors flex items-center gap-1.5 shadow-sm">
-                                                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Simpan
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                                                 </button>
                                             </div>
                                         </div>
@@ -2294,22 +2230,6 @@
             ['table', 'teknisi','dispatch', 'act', 'ikroke', 'ikrnok', 'kendalateknik', 'kendalapelanggan', 'analytics', 'raw'].forEach(t => {
                 const btn = document.getElementById('tab-' + t);
                 const view = document.getElementById('view-' + t);
-<<<<<<< HEAD
-                
-                if (btn) {
-                    // 1. Hapus warna state aktif & tidak aktif sebelumnya tanpa merusak layout dasar
-                    btn.classList.remove('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold', 'text-slate-300', 'hover:bg-slate-800', 'font-medium');
-
-                    if (t === tabName) {
-                        // 2. Terapkan warna saat tombol Aktif (Dipencet)
-                        btn.classList.add('bg-blue-600', 'text-white', 'shadow-sm', 'font-semibold');
-                    } else {
-                        // 3. Terapkan warna saat tombol Tidak Aktif
-                        btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white', 'font-medium');
-                    }
-                }
-                
-=======
                 if (btn) {
                     if (t === tabName) {
                         btn.className = t === 'ai' 
@@ -2321,27 +2241,17 @@
                             : "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition";
                     }
                 }
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                 if (view) {
                     if (t === tabName) view.classList.remove('hidden');
                     else view.classList.add('hidden');
                 }
             });
-<<<<<<< HEAD
-
-            // Menutup sidebar di tampilan mobile saat menu diklik
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             if (window.innerWidth < 1024) {
                 const sidebar = document.getElementById('appSidebar');
                 const backdrop = document.getElementById('sidebarBackdrop');
                 sidebar.classList.add('-translate-x-full');
                 backdrop.classList.add('hidden');
             }
-<<<<<<< HEAD
-            
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             if (tabName === 'analytics') renderAnalytics();
         }
 
@@ -2559,7 +2469,6 @@
             }
         }
 
-<<<<<<< HEAD
 
         // =====================================
         // LEMBAR KERJA - DATA PERSISTEN
@@ -2727,59 +2636,19 @@
         }
 
         function toggleExpand(id, wonum = '') {
-=======
-        function toggleExpand(id) {
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             const expandRow = document.getElementById(`expand-${id}`);
             const icon = document.getElementById(`icon-${id}`);
 
             if (expandRow.classList.contains('hidden')) {
                 expandRow.classList.remove('hidden');
                 icon.classList.add('rotate-90');
-<<<<<<< HEAD
                 fillWorksheetFields(wonum || id, 'expand', id);
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             } else {
                 expandRow.classList.add('hidden');
                 icon.classList.remove('rotate-90');
             }
         }
 
-<<<<<<< HEAD
-        function openModalLembarKerja(wonum) {
-            const normalizedWonum = String(wonum || '')
-                .replace(/\s+/g, '')
-                .trim();
-
-            const item = Array.isArray(rawData)
-                ? rawData.find(row =>
-                    row &&
-                    row.wonum &&
-                    String(row.wonum)
-                        .replace(/\s+/g, '')
-                        .trim() === normalizedWonum
-                )
-                : null;
-
-            if (!item) {
-                console.error('Data WONUM tidak ditemukan:', wonum);
-                showToast('Data WONUM tidak ditemukan', 'error');
-                return;
-            }
-
-            document.getElementById('modal-wonum').innerText =
-                'WONUM: ' + (item.wonum || '-');
-
-            // Isi field lain kalau memang ada
-            // document.getElementById(...).value = item....
-
-            document.getElementById('modal-lembar-kerja').classList.remove('hidden');
-
-            fillWorksheetFields(item.wonum, 'modal');
-            loadWorksheetHistory(item.wonum);
-
-=======
         function openModalLembarKerja(index) {
             // Ambil data spesifik berdasarkan baris yang diklik
             const item = window.mitraFilteredData[index]; 
@@ -2798,7 +2667,6 @@
             document.getElementById('modal-lembar-kerja').classList.remove('hidden');
             
             // Render ulang icon jika ada yang baru
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
@@ -2808,13 +2676,6 @@
             // Sembunyikan Modal
             document.getElementById('modal-lembar-kerja').classList.add('hidden');
         }
-<<<<<<< HEAD
-
-        setInterval(function() {
-            location.reload();
-        }, 300000);
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
     </script>
 
     <!-- MODAL LEMBAR KERJA (POP-UP) -->
@@ -2858,16 +2719,8 @@
                                 <div id="modal-paket" class="font-bold text-blue-600">-</div>
                             </div>
                             <div>
-<<<<<<< HEAD
-                                <div id="modal-alamat"
-                                    class="font-medium text-slate-700 bg-slate-50 p-2 rounded border border-slate-100"
-                                    style="white-space: normal; overflow-wrap: anywhere; word-break: normal;">
-                                    -
-                                </div>
-=======
                                 <div class="text-slate-500 text-xs mb-1">Alamat</div>
                                 <div id="modal-alamat" class="font-medium text-slate-700 bg-slate-50 p-2 rounded border border-slate-100">-</div>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </div>
                         </div>
                     </div>
@@ -2888,44 +2741,27 @@
                             <!-- Kolom Fungsional -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">SN ONT (Modem)</label>
-<<<<<<< HEAD
                                 <input id="modal-sn-ont" type="text" placeholder="Ketik SN..." class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Port ODP</label>
                                 <input id="modal-port-odp" type="text" placeholder="Contoh: 01" class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
-=======
-                                <input type="text" placeholder="Ketik SN..." class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Port ODP</label>
-                                <input type="text" placeholder="Contoh: 01" class="w-full bg-white border border-slate-300 rounded p-2 text-slate-800 focus:border-blue-500 outline-none">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </div>
                             
                             <!-- Kolom "Pajangan" ala Sentrava -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">Bandwidth</label>
-<<<<<<< HEAD
                                 <input type="text" disabled placeholder="Belum tersedia di database WOC" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">VLAN Internet</label>
                                 <input type="text" disabled placeholder="Belum tersedia di database WOC" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
-=======
-                                <input type="text" disabled placeholder="Auto" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-400 mb-1">VLAN Internet</label>
-                                <input type="text" disabled placeholder="Auto" class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </div>
                             <div class="col-span-2">
                                 <label class="block text-xs font-semibold text-slate-400 mb-1">OLT / Slot</label>
                                 <input type="text" disabled placeholder="Tarik dari sistem pusat..." class="w-full bg-slate-100 border border-slate-200 rounded p-2 text-slate-400 cursor-not-allowed">
                             </div>
                         </div>
-<<<<<<< HEAD
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
                             <div class="md:col-span-2">
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Koordinat Aktual</label>
@@ -2953,11 +2789,6 @@
                         <div class="mt-4 flex justify-end">
                             <button onclick="saveLembarKerja(document.getElementById('modal-wonum').innerText.replace(/^WONUM:\s*/, ''), 'modal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
                                 <i data-lucide="save" class="w-3.5 h-3.5 inline-block"></i> Simpan Teknis
-=======
-                        <div class="mt-4 flex justify-end">
-                            <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                                Simpan Teknis
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </button>
                         </div>
                     </div>
@@ -2974,18 +2805,12 @@
                             <textarea id="modal-keterangan" rows="3" class="w-full bg-white border border-slate-300 rounded p-3 text-slate-800 focus:border-blue-500 outline-none" placeholder="Tuliskan progress atau kendala teknisi..."></textarea>
                         </div>
                         <div class="mt-3 flex justify-end">
-<<<<<<< HEAD
                             <button onclick="saveLembarKerja(document.getElementById('modal-wonum').innerText.replace(/^WONUM:\s*/, ''), 'modal')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
                                 <i data-lucide="save" class="w-3.5 h-3.5 inline-block"></i> Simpan Update
-=======
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-sm">
-                                Update Status
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                             </button>
                         </div>
                     </div>
 
-<<<<<<< HEAD
 
                     <!-- RIWAYAT PERUBAHAN -->
                     <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
@@ -3000,16 +2825,10 @@
                         </div>
                     </div>
 
-=======
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-<<<<<<< HEAD
-</html>     
-=======
 </html>
->>>>>>> 3724cce75b2b0c00851640c214ae782c08c7223e
